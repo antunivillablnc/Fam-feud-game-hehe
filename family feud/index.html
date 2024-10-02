@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Feud</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Additional custom styles */
+        .btn-custom {
+            border-radius: 0.5rem; /* Rounded corners */
+        }
+
+        /* Hover effect for game buttons */
+        .btn-custom:hover {
+            background-color: #0056b3; /* Darker shade for hover effect */
+            color: white; /* Change text color if needed */
+        }
+
+        .btn-warning:hover {
+            background-color: #d39e00; /* Darker shade for warning button */
+            color: white; /* Change text color if needed */
+        }
+
+        /* Custom styles for headings and team names */
+        h1 {
+            font-weight: bold; /* Bold font weight for the main title */
+            text-transform: uppercase; /* Uppercase transformation for the main title */
+        }
+
+        h2 {
+            font-weight: 600; /* Semi-bold font weight for subheadings */
+            text-transform: capitalize; /* Capitalize for subheadings */
+        }
+
+        .team-name {
+            font-weight: bold; /* Bold font weight for team names */
+            text-transform: uppercase; /* Uppercase for team names */
+            font-size: 1.2rem; /* Slightly larger font size for emphasis */
+        }
+
+        /* Custom styles for responsiveness */
+        @media (max-width: 576px) {
+            .introduction {
+                text-align: center; /* Center text on small screens */
+            }
+
+            .score-table {
+                margin: 0 auto; /* Center the score table */
+            }
+
+            #results {
+                margin: 1rem 0; /* Adjust margin for results */
+            }
+
+            #game-container {
+                flex-direction: column; /* Stack columns vertically */
+            }
+
+            #game-container .col-md-6 {
+                width: 100%; /* Full width for columns on small screens */
+                margin-bottom: 1rem; /* Space between columns */
+            }
+
+            #countdown-timer {
+                font-size: 1.5rem; /* Larger font for countdown */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="game-header text-center py-4">
+        <h1>Family Feud Game</h1>
+    </header>
+
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Rules</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Leaderboards</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="introduction container mt-4">
+        <p>Family Feud is a popular TV game show where two families compete to name the most popular answers to survey questions in order to win points.</p>
+
+        <div class="row" id="game-container">
+            <div class="col-md-6">
+                <h2>Game Setup</h2>
+                <ul>
+                    <li class="team-name" style="display: none;">Villablanca</li>
+                    <li class="team-name" style="display: none;">Awatin</li>
+                    <li class="team-name" style="display: none;">Agno</li>
+                    <li class="team-name" style="display: none;">Almario</li>
+                </ul>
+
+                <form id="answer-form" method="POST">
+                    <div class="form-group">
+                        <label for="user-answer">Your Answer:</label>
+                        <input type="text" class="form-control" id="user-answer" name="user-answer" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-custom">Submit</button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <table class="score-table table">
+                    <thead class="thead-light">
+                      <tr>
+                        <th class="text-center team-name">Team 1</th>
+                        <th class="text-center team-name">Team 2</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td id="team1-score" class="text-center">0</td>
+                        <td id="team2-score" class="text-center">0</td>
+                      </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-primary btn-custom">Start Game!</button>
+            </div>
+        </div>
+
+        <footer class="mt-4">
+            <h3>Game Over!</h3>
+        </footer>
+    </section>
+
+    <div class="container mt-4" id="results">
+        <h2>Results</h2>
+        <ul id="answer-list" class="list-group">
+          <!-- Answers and points will be appended here dynamically -->
+        </ul>
+    </div>
+
+    <audio id="background-music" src="Family Feud Theme Song (Harvey era).mp3" autoplay loop>
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="container mt-4 team-controls">
+        <button class="btn btn-warning btn-custom" onclick="pass()">Pass</button>
+        <button class="btn btn-primary btn-custom" onclick="play()">Play</button>
+    </div>
+
+    <form id="player-names-form" class="container mt-4">
+        <h2>Enter Player Names</h2>
+        <div class="form-group">
+            <label for="team1-player1">Team 1 - Player 1:</label>
+            <input type="text" class="form-control" id="team1-player1" name="team1-player1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="team1-player2">Team 1 - Player 2:</label>
+            <input type="text" class="form-control" id="team1-player2" name="team1-player2" required>
+        </div>
+
+        <div class="form-group">
+            <label for="team2-player1">Team 2 - Player 1:</label>
+            <input type="text" class="form-control" id="team2-player1" name="team2-player1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="team2-player2">Team 2 - Player 2:</label>
+            <input type="text" class="form-control" id="team2-player2" name="team2-player2" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-custom">Start Game</button>
+    </form>
+
+    <div class="container mt-4 text-center">
+        <img src="fambuzzer.jpg" alt="Family Feud Buzzer" id="buzzer-image" class="img-fluid">
+    </div>
+
+    <div id="countdown-timer" class="container mt-4" style="display: none;">
+        <h2>Round starts in:</h2>
+        <span id="timer">3</span> seconds
+    </div>
+    
+    <div id="progress-container" class="container mt-4" style="width: 100%; background-color: #f3f3f3; display: none;">
+        <div id="progress-bar" style="width: 0%; height: 30px; background-color: #4caf50;"></div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <!-- Bootstrap JS (optional) -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="game.js"></script> <!-- Link to the JavaScript file -->
+    </body>
+    </html>
+    
+</body>
+</html>

@@ -1,0 +1,48 @@
+body{
+    font-family: 'Times New Roman', Times, serif;
+}
+.game-header
+{
+    text-align: center;
+    background-color: red;
+    
+}
+
+#game-container
+{
+    padding: 100%;
+    margin: auto;
+    height: 1vh;
+}
+
+
+
+.navbar:hover {
+    color: #28a745; /* Change this color to whatever you like */
+    background-color: rgba(0, 0, 0, 0.1); /* Optional: add background color on hover */
+}
+
+.score-table{
+    box-shadow: 1px;
+}
+
+.answer-list{
+    display: flex;
+}
+.countdown-timer{
+    font-size: 25px;
+    color: black;
+}
+
+#buzzer-image{
+    position: relative;
+}
+
+#results{
+    background-color: #28a745;
+}
+
+.game-container{
+    display: none;
+}
+
